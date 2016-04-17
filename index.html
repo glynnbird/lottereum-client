@@ -1,0 +1,48 @@
+<html>
+<head>
+<script src="web3.min.js"></script>
+</head>
+<body>
+
+<script>
+  var cb = function(er,data) { };
+
+  var web3 = new Web3(new Web3.providers.HttpProvider("http://52.90.73.172:8000"));
+  web3.eth.getAccounts(function(err, data) {
+    console.log("getaccounts",err,data);
+    var accounts = data;
+    var src="contract draw {     address owner;     uint public numTickets;     uint public drawDate;     bool public drawn;     uint public entryFee;     uint public winningNumber;       address organiser;       struct Ticket {      uint guess;      address eth_address;     }     mapping(uint => Ticket) public tickets;     address[] public winningaddresses;      event BuyTicket(uint _ticketid);     event DrawDone(uint _winningNumber);       function draw(uint _offset, uint _entryFee, address _organiser) {          owner = msg.sender;   	 numTickets = 0;    	 drawn = false;    	 winningNumber = 0;          drawDate = now + _offset;          entryFee = _entryFee;          organiser= _organiser;     }      function getPot() constant returns (uint) {        return this.balance;      }      function buyTicket(uint _guess) returns (uint ticketid) {       if (msg.value != entryFee) throw;       if (_guess > 1000 || _guess < 1) throw;       if (drawn) throw;       ticketid = numTickets++;       tickets[ticketid] = Ticket(_guess, msg.sender);       BuyTicket(ticketid);     }      function doDraw() {      if (drawn) throw;      if (now < drawDate) throw;       winningNumber = (now % 1000) +1 ;       for (uint i = 0; i < numTickets; ++i) {         if (tickets[i].guess == winningNumber) {           winningaddresses.push(tickets[i].eth_address);          }       }       var commission = this.balance / 10;       var payout = this.balance - commission;       for (uint j = 0; j < winningaddresses.length; ++j) {         winningaddresses[j].send(payout / winningaddresses.length);       }       organiser.send(commission);       DrawDone(winningNumber);       drawn = true;     }      function transferPot(address _newContract) {       if (msg.sender != owner) throw;       if (this.balance == 0) throw;       if (!drawn) throw;        _newContract.send(this.balance);     } }";
+
+    var srcCompiled = web3.eth.compile.solidity(src);
+    var drawContract = web3.eth.contract(srcCompiled.draw.info.abiDefinition);
+    var theminer = accounts[0];
+    var thebuyer = accounts[1];
+    var anotherbuyer = accounts[2];
+    var theorganiser = accounts[3];
+    console.log(theminer);
+
+    draw = drawContract.new(30,100000000000000000,theorganiser,
+      {
+        from: theminer,
+        data: srcCompiled.draw.code, 
+        gas: 3000000
+      }, function(e, contract){
+       if(!e) { if(!contract.address) {
+         console.log("Contract transaction send: TransactionHash: " + contract.transactionHash + " waiting to be mined...");
+       } else {
+         
+          console.log("Contract mined! Address: " + contract.address);
+         console.log(contract);
+//         draw.buyTicket(42,{from: theminer, value: 100000000000000000, gas:3000000 });
+       } 
+     }
+     });
+
+  });
+
+
+
+</script>
+
+</body>
+</html>
