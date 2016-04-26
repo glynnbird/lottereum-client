@@ -11,6 +11,7 @@
   Drawn = <span id="drawn">...</span><br>
   Draw Date = <span id="drawDate">...</span><br>
   Entry Fee = <span id="entryFee">...</span><br>
+  Next Draw = <span id ="nextDraw"> .. </span><br>
   Live Feed!
   <div id="livetickets"></div>  
   <div id="livedraw"></div>  
@@ -19,149 +20,167 @@
 <script>
   var cb = function(er,data) { };
 
-  var web3 = new Web3(new Web3.providers.HttpProvider("http://54.165.91.220:8000"));
+  var web3 = new Web3(new Web3.providers.HttpProvider("http://54.164.106.169:8000"));
  
-  var address = "0x7d1fce8914743202a595fdcca75e1c44b2f97f22";
+  var address = "0x0a118bd5a764119635022ca0912907bb0495a48c";
   
   var abiDefinition = [{
-                            constant: true,
-                            inputs: [],
-                            name: "entryFee",
-                            outputs: [{
-                                name: "",
-                                type: "uint256"
-                            }],
-                            type: "function"
-                        }, {
-                            constant: false,
-                            inputs: [{
-                                name: "_newContract",
-                                type: "address"
-                            }],
-                            name: "transferPot",
-                            outputs: [],
-                            type: "function"
-                        }, {
-                            constant: true,
-                            inputs: [],
-                            name: "numTickets",
-                            outputs: [{
-                                name: "",
-                                type: "uint256"
-                            }],
-                            type: "function"
-                        }, {
-                            constant: true,
-                            inputs: [{
-                                name: "",
-                                type: "uint256"
-                            }],
-                            name: "winningaddresses",
-                            outputs: [{
-                                name: "",
-                                type: "address"
-                            }],
-                            type: "function"
-                        }, {
-                            constant: true,
-                            inputs: [],
-                            name: "getPot",
-                            outputs: [{
-                                name: "",
-                                type: "uint256"
-                            }],
-                            type: "function"
-                        }, {
-                            constant: true,
-                            inputs: [],
-                            name: "winningNumber",
-                            outputs: [{
-                                name: "",
-                                type: "uint256"
-                            }],
-                            type: "function"
-                        }, {
-                            constant: true,
-                            inputs: [{
-                                name: "",
-                                type: "uint256"
-                            }],
-                            name: "tickets",
-                            outputs: [{
-                                name: "guess",
-                                type: "uint256"
-                            }, {
-                                name: "eth_address",
-                                type: "address"
-                            }],
-                            type: "function"
-                        }, {
-                            constant: false,
-                            inputs: [{
-                                name: "_guess",
-                                type: "uint256"
-                            }],
-                            name: "buyTicket",
-                            outputs: [{
-                                name: "ticketid",
-                                type: "uint256"
-                            }],
-                            type: "function"
-                        }, {
-                            constant: true,
-                            inputs: [],
-                            name: "drawDate",
-                            outputs: [{
-                                name: "",
-                                type: "uint256"
-                            }],
-                            type: "function"
-                        }, {
-                            constant: false,
-                            inputs: [],
-                            name: "doDraw",
-                            outputs: [],
-                            type: "function"
-                        }, {
-                            constant: true,
-                            inputs: [],
-                            name: "drawn",
-                            outputs: [{
-                                name: "",
-                                type: "bool"
-                            }],
-                            type: "function"
-                        }, {
-                            inputs: [{
-                                name: "_offset",
-                                type: "uint256"
-                            }, {
-                                name: "_entryFee",
-                                type: "uint256"
-                            }, {
-                                name: "_organiser",
-                                type: "address"
-                            }],
-                            type: "constructor"
-                        }, {
-                            anonymous: false,
-                            inputs: [{
-                                indexed: false,
-                                name: "_ticketid",
-                                type: "uint256"
-                            }],
-                            name: "BuyTicket",
-                            type: "event"
-                        }, {
-                            anonymous: false,
-                            inputs: [{
-                                indexed: false,
-                                name: "_winningNumber",
-                                type: "uint256"
-                            }],
-                            name: "DrawDone",
-                            type: "event"
-                        }];
+    constant: true,
+    inputs: [],
+    name: "entryFee",
+    outputs: [{
+        name: "",
+        type: "uint256"
+    }],
+    type: "function"
+}, {
+    constant: false,
+    inputs: [{
+        name: "_newContract",
+        type: "address"
+    }],
+    name: "transferPot",
+    outputs: [],
+    type: "function"
+}, {
+    constant: true,
+    inputs: [],
+    name: "nextDraw",
+    outputs: [{
+        name: "",
+        type: "address"
+    }],
+    type: "function"
+}, {
+    constant: true,
+    inputs: [],
+    name: "numTickets",
+    outputs: [{
+        name: "",
+        type: "uint256"
+    }],
+    type: "function"
+}, {
+    constant: true,
+    inputs: [{
+        name: "",
+        type: "uint256"
+    }],
+    name: "winningaddresses",
+    outputs: [{
+        name: "",
+        type: "address"
+    }],
+    type: "function"
+}, {
+    constant: true,
+    inputs: [],
+    name: "getPot",
+    outputs: [{
+        name: "",
+        type: "uint256"
+    }],
+    type: "function"
+}, {
+    constant: true,
+    inputs: [],
+    name: "winningNumber",
+    outputs: [{
+        name: "",
+        type: "uint256"
+    }],
+    type: "function"
+}, {
+    constant: true,
+    inputs: [{
+        name: "",
+        type: "uint256"
+    }],
+    name: "tickets",
+    outputs: [{
+        name: "guess",
+        type: "uint256"
+    }, {
+        name: "eth_address",
+        type: "address"
+    }],
+    type: "function"
+}, {
+    constant: false,
+    inputs: [{
+        name: "_guess",
+        type: "uint256"
+    }],
+    name: "buyTicket",
+    outputs: [{
+        name: "ticketid",
+        type: "uint256"
+    }],
+    type: "function"
+}, {
+    constant: true,
+    inputs: [],
+    name: "organiser",
+    outputs: [{
+        name: "",
+        type: "address"
+    }],
+    type: "function"
+}, {
+    constant: true,
+    inputs: [],
+    name: "drawDate",
+    outputs: [{
+        name: "",
+        type: "uint256"
+    }],
+    type: "function"
+}, {
+    constant: false,
+    inputs: [],
+    name: "doDraw",
+    outputs: [],
+    type: "function"
+}, {
+    constant: true,
+    inputs: [],
+    name: "drawn",
+    outputs: [{
+        name: "",
+        type: "bool"
+    }],
+    type: "function"
+}, {
+    inputs: [{
+        name: "_offset",
+        type: "uint256"
+    }, {
+        name: "_entryFee",
+        type: "uint256"
+    }, {
+        name: "_organiser",
+        type: "address"
+    }],
+    type: "constructor"
+}, {
+    anonymous: false,
+    inputs: [{
+        indexed: false,
+        name: "_ticketid",
+        type: "uint256"
+    }],
+    name: "BuyTicket",
+    type: "event"
+}, {
+    anonymous: false,
+    inputs: [{
+        indexed: false,
+        name: "_winningNumber",
+        type: "uint256"
+    }],
+    name: "DrawDone",
+    type: "event"
+}]
                         
     var draw = web3.eth.contract(abiDefinition).at(address);
     $('#address').html(address);
@@ -179,6 +198,9 @@
     });
     draw.entryFee(function(err, data) { 
       $('#entryFee').html(JSON.stringify(data));
+    });
+    draw.nextDraw(function(err,data)  {
+       $('#nextDraw').html(JSON.stringify(data));
     });
     //console.log(x);
       
