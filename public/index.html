@@ -1,9 +1,13 @@
 <html>
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<script src="web3.min.js"></script>
+<script src="/js/web3.min.js"></script>
 </head>
 <body>
+
+  <script>
+    var address = window.location.pathname.replace("/draw/","");
+  </script>
 
   <h1 id="address">..</h1>
   Num Tickets = <span id="numTickets">...</span><br>
@@ -22,8 +26,9 @@
 
   var web3 = new Web3(new Web3.providers.HttpProvider("http://54.164.106.169:8000"));
  
-  var address = "0x0a118bd5a764119635022ca0912907bb0495a48c";
-  
+   //var address = "0x0a118bd5a764119635022ca0912907bb0495a48c";
+  $('#address').html(address);
+
   var abiDefinition = [{
     constant: true,
     inputs: [],
@@ -200,7 +205,7 @@
       $('#entryFee').html(JSON.stringify(data));
     });
     draw.nextDraw(function(err,data)  {
-       $('#nextDraw').html(JSON.stringify(data));
+       $('#nextDraw').html('<a href="/draw/' + data + '">' + data + '</a>');
     });
     //console.log(x);
       
