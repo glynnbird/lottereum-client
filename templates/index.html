@@ -1,12 +1,74 @@
 <html>
 <head>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"> </script>
+<script src="/js/web3.min.js"> </script>
 
 </head>
 
 <body>
 <h1> Welcome to Lottereum!</h1>
 
+Here is your latest draw <br>
+<div id="latest_draw">..</div>
+
+<script> 
+var drawRegistryadd = "0xac7fbedfb0f2e14ff1d5b1203465e8ee454b9be3";
+var drawRegistryabi = [{
+  constant: true,
+  inputs: [{
+  name: "",
+  type: "uint256"
+  }],
+  name: "draws",
+  outputs: [{
+  name: "drawDate",
+  type: "uint256"
+  }, {
+  name: "eth_address",
+  type: "address"
+  }],
+  type: "function"
+}, {
+  constant: true,
+  inputs: [],
+  name: "getLatestDraw",
+  outputs: [{
+  name: "_latest",
+  type: "address"
+  }],
+  type: "function"
+}, {
+  constant: false,
+  inputs: [{
+  name: "_eth_address",
+  type: "address"
+  }],
+  name: "addDraw",
+  outputs: [],
+  type: "function"
+}, {
+  constant: true,
+  inputs: [],
+  name: "numDraws",
+  outputs: [{
+  name: "",
+  type: "uint256"
+  }],
+  type: "function"
+}, {
+  inputs: [],
+  type: "constructor"
+}];
+
+var web3 = new Web3(new Web3.providers.HttpProvider("http://54.88.100.205:8000"));
+
+var drawRegistry = web3.eth.contract(drawRegistryabi).at(drawRegistryadd);
+
+drawRegistry.getLatestDraw(function(err, data) {
+   $('#latest_draw').html('<a href="/draw/' + data + '">' + data + '</a>');
+});
+
+</script>
 </body>
 
 </html>
