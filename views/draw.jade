@@ -4,4 +4,12 @@ html
   body
     h1 Here is the drawo
     div The Pot is #{pot}
-    div Hello world
+    div Drawn #{drawn}  
+    div numTickets #{numTickets}
+    div drawDate #{drawDate}
+    div payout #{payout}
+    div winningNumber #{winningNumber}
+    div 
+      a(href="/draw/#{nextDraw}") nextDraw
+    div 
+      a(href="/draw/#{previousDrawAddress}") previousDrawAddress
