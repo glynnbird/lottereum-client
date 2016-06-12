@@ -1,8 +1,10 @@
+doctype html
 html
-  head
-    title LOTTEREO
+  include ./header.jade
   body
-    h1 Welcome to Lottero
-    div The latest draw is 
-      a(href="/draw/#{latestDraw}") #{latestDraw}
-    div Hello world
+    div.container
+      div.jumbotron
+        h1 Welcome to Lottereo
+        p a Trustless Lottery on the Ethereum Blockchain
+      div The latest draw is 
+        a(href="/draw/#{latestDraw}") #{latestDraw}

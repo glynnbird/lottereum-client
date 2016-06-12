@@ -1,15 +1,38 @@
+doctype html
 html
-  head
-    title LOTTEREO DRAW
+  include ./header.jade
   body
-    h1 Here is the drawo
-    div The Pot is #{pot}
-    div Drawn #{drawn}  
-    div numTickets #{numTickets}
-    div drawDate #{drawDate}
-    div payout #{payout}
-    div winningNumber #{winningNumber}
-    div 
-      a(href="/draw/#{nextDraw}") nextDraw
-    div 
-      a(href="/draw/#{previousDrawAddress}") previousDrawAddress
+    div.container
+      nav.navbar.navbar-default.navbar-fixed-top
+        div.container
+          div.navbar-header
+            a.navbar-brand(href="/") Lottereo
+      h1 Here is the draw
+      table.table
+        if !drawn
+          tr
+            th Pot Value
+            td #{pot/Math.pow(10,18)} Ether      
+        tr
+          th Drawn?
+          td #{drawn}
+        tr
+          th Number of Tickets bought
+          td #{numTickets}
+        if !drawn
+          tr
+            th Earliest Possible Draw Date
+            - var displayDate = new Date(drawDate*1000).toString()
+            td #{displayDate}
+        if drawn
+          tr
+            th Payout Value
+            td #{payout/Math.pow(10,18)} Ether
+          tr
+            th Winning Number
+            td #{winningNumber} 
+      if previousDrawAddress !="0x"
+        a.btn.btn-primary(href="/draw/#{previousDrawAddress}") Previous Draw
+      if nextDraw !="0x0000000000000000000000000000000000000000"
+        a.btn.btn-primary(href="/draw/#{nextDraw}") Next Draw
+  
