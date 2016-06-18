@@ -40,8 +40,8 @@ app.get("/draw/:id", function(req,res) {
     d.nextDraw,
     d.previousDrawAddress
   ], function(err, results) {
-     console.log(err, results);
-     res.render ('draw', { 
+
+     var drawData = { 
          pot: results[0],
          drawn: results[1],
          numTickets: results[2],
@@ -50,9 +50,29 @@ app.get("/draw/:id", function(req,res) {
          payout: results[5],
          nextDraw: results[6],
          previousDrawAddress: results[7]
-     });
-  });
+     };
 
+     // create array of tasks to extract each winning Ticket in turn
+     var winners = [];
+     var i = 0;
+     var done = false;
+     async.doUntil(function(callback) {
+       d.winningaddresses(i++, function(err, data ) {
+         if (data == "0x") {
+           done = true;
+         } else { 
+           winners.push(data);
+         }
+         callback();
+       }); 
+     },function() {
+       return done;
+     }, function() {
+       drawData.winners = winners;
+       res.render ('draw', drawData);  
+     });
+
+  });
 
 });
 

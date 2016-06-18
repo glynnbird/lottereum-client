@@ -30,7 +30,12 @@ html
             td #{payout/Math.pow(10,18)} Ether
           tr
             th Winning Number
-            td #{winningNumber} 
+            td #{winningNumber}
+      if winners.length > 0
+        h2 Winning Accounts
+        ul
+          each winner in winners
+            li= winner 
       if previousDrawAddress !="0x"
         a.btn.btn-primary(href="/draw/#{previousDrawAddress}") Previous Draw
       if nextDraw !="0x0000000000000000000000000000000000000000"
